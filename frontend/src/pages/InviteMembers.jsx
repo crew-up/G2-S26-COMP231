@@ -13,20 +13,6 @@ export default function InviteMembers() {
     <div className="content-area" style={{ maxWidth: 520 }}>
       <h1>Invite Members</h1>
       <form onSubmit={handleSubmit}>
-        {/* Task 2.6 (Dang) - mapped email inputs */}
-        {emails.map((email, i) => (
-          <div className="email-chip-row" key={i}>
-            <input
-              type="email"
-              value={email}
-              placeholder="name@email.com"
-              onChange={(e) => updateEmail(i, e.target.value)}
-            />
-            {emails.length > 1 && (
-              <button type="button" className="remove-chip" onClick={() => removeEmail(i)}>×</button>
-            )}
-          </div>
-        ))}
         <button type="button" className="add-email-link" onClick={addEmailField}>+ Add another email</button>
 
         <label htmlFor="message">Message (Optional)</label>
@@ -39,7 +25,6 @@ export default function InviteMembers() {
         </div>
       </form>
 
-      {/* Task 2.5 (Aadil) - static shell, Task 2.6 (Dang) fills the .map() */}
       <div className="card" style={{ marginTop: 24 }}>
         <h2>Pending invitations</h2>
         {pending.length === 0 && <div className="empty-state">No pending invitations.</div>}
