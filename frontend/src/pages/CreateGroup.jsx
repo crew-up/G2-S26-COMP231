@@ -1,8 +1,4 @@
-// pages/CreateGroup.jsx
 // M1 - As a Group Organizer, I can create a group.
-// Note: the creator automatically becomes the first member with organizer
-// rights (handled server-side). Note: inviting members happens afterward,
-// in a separate step (M2) - creating a group does not start the invite flow.
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import client from "../api/client";
@@ -29,8 +25,6 @@ export default function CreateGroup() {
     setBusy(true);
     try {
       const res = await client.post("/groups", { name, description });
-      // Land on the new group's workspace, NOT the invite flow - inviting is
-      // a separate, deliberate step (M2).
       navigate(`/groups/${res.data.group._id}`);
     } catch (err) {
       setError(err.response?.data?.error || "Could not create the group.");
