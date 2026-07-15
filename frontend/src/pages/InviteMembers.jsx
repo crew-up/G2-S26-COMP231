@@ -1,10 +1,7 @@
 // pages/InviteMembers.jsx
 // M2 - As a Group Organizer, I can invite members by email.
 // Note: this is the send side only; accepting is a separate story (M10).
-// Matches the mockup: multiple email chips can be queued up and sent
-// together, with an optional message. The backend invite endpoint takes one
-// email at a time, so the frontend sends one request per chip and reports
-// which ones failed (e.g. already a member, already pending).
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import client from "../api/client";
