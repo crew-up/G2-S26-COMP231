@@ -1,12 +1,46 @@
 // pages/CreateEvent.jsx
 
-
+import { useState } from "react";  
 import { useNavigate, useParams } from "react-router-dom";          
+import client from "../api/client"; 
 
 export default function CreateEvent() {
   const { groupId } = useParams();                                    
   const navigate = useNavigate();                                     
 
+const [title, setTitle] = useState("");
+  const [location, setLocation] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+ async function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
+    setBusy(true);
+
+    try {
+      const startTime = new Date(`${date}T${time}`);
+
+      const res = await client.post(`/groups/${groupId}/events`, {
+        title,
+        location,
+        startTime: startTime.toISOString(),
+        description,
+      });
+
+      navigate(`/groups/${groupId}/events/${res.data.event._id}`);
+    } catch (err) {
+      setError(
+        err.response?.data?.error || "Could not create the event."
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+  
   return (
     <div className="content-area" style={{ maxWidth: 480 }}>
       <h1>Create Event</h1>
@@ -27,6 +61,7 @@ export default function CreateEvent() {
         <label htmlFor="description">Description (Optional)</label>
         <input id="description" value={description} onChange={(e) => setDescription(e.target.value)} maxLength={1000} />
 
+        {error && <p className="error-text">{error}</p>}
 
         <div className="form-actions">
           <button type="submit" disabled={busy}>{busy ? "Creating..." : "Create Event"}</button>
