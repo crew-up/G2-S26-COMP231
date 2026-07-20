@@ -8,6 +8,20 @@ import GroupTabs from "../components/GroupTabs";
 
 export default function Chat() {
   const { groupId } = useParams();
+  const [draft, setDraft] = useState("");
+  const [error, setError] = useState("");
+
+  function handleSend(e) {
+    e.preventDefault();
+    const body = draft.trim();
+    if (!body) return;
+    setError("");
+    const socket = getSocket();
+    socket.emit("message:send", { groupId, body }, (ack) => {
+      if (ack?.error) setError(ack.error);
+    });
+    setDraft("");
+  }
   const [group, setGroup] = useState(null);
   const [myRole, setMyRole] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -44,15 +58,16 @@ useEffect(() => {
         {messages.length === 0 && <div className="empty-state">No messages yet - say hi!</div>} 
       </div>
 
-      <form className="chat-form">
+      <form className="chat-form" onSubmit={handleSend}>
         <input
-          value=""
-          onChange={() => {}}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
           placeholder="Type a message......."
           maxLength={2000}
         />
         <button type="submit">▶</button>
       </form>
+      {error && <p className="error-text">{error}</p>}
     </div>
   );
 }
