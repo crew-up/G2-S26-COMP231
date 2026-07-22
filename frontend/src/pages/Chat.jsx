@@ -20,6 +20,7 @@ export default function Chat() {
   const [group, setGroup] = useState(null);
   const [myRole, setMyRole] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [hasMore, setHasMore] = useState(false);
   const logRef = useRef(null);
 
   function handleSend(e) {
@@ -110,6 +111,12 @@ const groups = [];
   return (
     <div className="content-area">
       <GroupTabs groupId={groupId} groupName={group?.name || "..."} myRole={myRole} />
+
+      {hasMore && (
+        <button className="secondary" onClick={loadOlder} style={{ marginBottom: 12 }}>
+          Load older messages
+        </button>
+      )}
 
       <div className="chat-log" ref={logRef}>
         {messages.length === 0 && <div className="empty-state">No messages yet - say hi!</div>} 
